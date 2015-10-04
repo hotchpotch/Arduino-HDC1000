@@ -3,7 +3,12 @@
 
 HDC1000 (A temperature & humidity sensor) library for Arduino.
 
-# examples
+## download
+
+[download zip file](./archive/master.zip)
+
+## examples
 
 [please see example code](./examples/hdc1000.ino)
+
 
