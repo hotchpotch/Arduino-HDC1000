@@ -1,6 +1,6 @@
 
 #include <Wire.h>
-#include "Arduino.h"
+#include <Arduino.h>
 #include "HDC1000.h"
 
 HDC1000::HDC1000(int address)

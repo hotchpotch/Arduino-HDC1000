@@ -2,9 +2,6 @@
 #ifndef __HDC1000_H__
 #define __HDC1000_H__
 
-#include <Wire.h>
-#include "Arduino.h"
-
 #define HDC1000_DEFAULT_ADDRESS 0x40
 #define HDC1000_CONFIGURATION_ADDRESS 0x02
 #define HDC1000_TEMP_ADDRESS 0x00
