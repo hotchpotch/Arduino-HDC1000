@@ -6,6 +6,7 @@
 #define HDC1000_CONFIGURATION_ADDRESS 0x02
 #define HDC1000_TEMP_ADDRESS 0x00
 #define HDC1000_HUMI_ADDRESS 0x01
+#define HDC1000_ERROR_CODE 65535
 
 class HDC1000
 {
@@ -17,6 +18,7 @@ public:
   void configure();
   float getTemperature();
   float getHumidity();
+  uint16_t getData(uint8_t address);
 };
 
 #endif  // __HDC1000_H__

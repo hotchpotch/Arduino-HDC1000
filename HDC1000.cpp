@@ -34,35 +34,41 @@ void HDC1000::configure()
 
 float HDC1000::getTemperature()
 {
-  uint16_t data;
+  uint16_t data = getData(HDC1000_TEMP_ADDRESS);
 
-  Wire.beginTransmission(_address);
-  Wire.write(HDC1000_TEMP_ADDRESS);
-  Wire.endTransmission(_address);
-
-  delay(7);
-
-  Wire.requestFrom(_address, (uint8_t)2);
-  data = Wire.read() << 8;
-  data = data | Wire.read();
+  if (data == HDC1000_ERROR_CODE) {
+    return HDC1000_ERROR_CODE;
+  }
 
   return (data / 65536.0 * 165) - 40;
 }
 
 float HDC1000::getHumidity()
 {
+  uint16_t data = getData(HDC1000_HUMI_ADDRESS);
+
+  if (data == HDC1000_ERROR_CODE) {
+    return HDC1000_ERROR_CODE;
+  }
+
+  return data / 65536.0 * 100;
+}
+
+uint16_t HDC1000::getData(uint8_t address)
+{
   uint16_t data;
 
   Wire.beginTransmission(_address);
-  Wire.write(HDC1000_HUMI_ADDRESS);
+  Wire.write(address);
   Wire.endTransmission(_address);
 
   delay(7);
 
   Wire.requestFrom(_address, (uint8_t)2);
   data = Wire.read() << 8;
+  Serial.println(data);
   data = data | Wire.read();
+  Serial.println(data);
 
-  return data / 65536.0 * 100;
+  return data;
 }
-
