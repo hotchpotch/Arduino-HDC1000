@@ -3,9 +3,18 @@
 #include <Arduino.h>
 #include "HDC1000.h"
 
-HDC1000::HDC1000(int address)
+HDC1000::HDC1000(uint8_t address)
 {
+  _rdy_pin = -1;
   _address = address;
+}
+
+void HDC1000::setRdyPin(int8_t rdy_pin)
+{
+  _rdy_pin = rdy_pin;
+  if (_rdy_pin != HDC1000_RDY_PIN_DISABLE) {
+    pinMode(_rdy_pin, INPUT);
+  }
 }
 
 void HDC1000::begin()
@@ -23,13 +32,15 @@ void HDC1000::configure()
     0b00000000, // LBR MODE 0, 14-bit
     0b00000000
   };
-  int i, length = sizeof(commands);
+  uint8_t i, length = sizeof(commands);
 
   Wire.beginTransmission(_address);
   for (i = 0; i < length; i++) {
     Wire.write(commands[i]);
   }
   Wire.endTransmission(_address);
+
+  setRdyPin(_rdy_pin);
 }
 
 float HDC1000::getTemperature()
@@ -62,7 +73,17 @@ uint16_t HDC1000::getData(uint8_t address)
   Wire.write(address);
   Wire.endTransmission(_address);
 
-  delay(7);
+  if (_rdy_pin == HDC1000_RDY_PIN_DISABLE) {
+    delay(7);
+  } else {
+    // wait rdy pin == L
+    uint16_t wait_count = 0;
+    while (digitalRead(_rdy_pin) == HIGH) {
+      if (wait_count++ == 50000) {
+        return HDC1000_ERROR_CODE;
+      }
+    }
+  }
 
   Wire.requestFrom(_address, (uint8_t)2);
   data = Wire.read() << 8;
