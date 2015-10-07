@@ -34,9 +34,7 @@ void HDC1000::configure()
 
 float HDC1000::getTemperature()
 {
-  // uint16_t for <<8 bit-shift
-  uint16_t d1;
-  uint8_t d2;
+  uint16_t data;
 
   Wire.beginTransmission(_address);
   Wire.write(HDC1000_TEMP_ADDRESS);
@@ -45,16 +43,15 @@ float HDC1000::getTemperature()
   delay(7);
 
   Wire.requestFrom(_address, (uint8_t)2);
-  d1 = Wire.read();
-  d2 = Wire.read();
+  data = Wire.read() << 8;
+  data = data | Wire.read();
 
-  return ((d1<<8 | d2) / 65536.0 * 165) - 40;
+  return (data / 65536.0 * 165) - 40;
 }
 
 float HDC1000::getHumidity()
 {
-  uint16_t d1;
-  uint8_t d2;
+  uint16_t data;
 
   Wire.beginTransmission(_address);
   Wire.write(HDC1000_HUMI_ADDRESS);
@@ -63,9 +60,9 @@ float HDC1000::getHumidity()
   delay(7);
 
   Wire.requestFrom(_address, (uint8_t)2);
-  d1 = Wire.read();
-  d2 = Wire.read();
+  data = Wire.read() << 8;
+  data = data | Wire.read();
 
-  return (d1<<8 | d2) / 65536.0 * 100;
+  return data / 65536.0 * 100;
 }
 
