@@ -87,9 +87,7 @@ uint16_t HDC1000::getData(uint8_t address)
 
   Wire.requestFrom(_address, (uint8_t)2);
   data = Wire.read() << 8;
-  Serial.println(data);
   data = data | Wire.read();
-  Serial.println(data);
 
   return data;
 }
