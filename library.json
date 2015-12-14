@@ -9,5 +9,5 @@
   },
   "frameworks": "arduino",
   "platforms": "atmelavr",
-  "examples": "examples/*.ino"
+  "examples": "examples/*/*.ino"
 }
